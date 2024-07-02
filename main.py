@@ -1,6 +1,6 @@
-from instruction_parser import InstructionParser
+from assembler import Assembler
 
 if __name__ == '__main__':
-    parser = InstructionParser("@2")
-    parser.parse()
-    print(parser.to_binary())
+    assembler = Assembler(['@2'])
+    assembler.parse_all()
+    print(assembler.to_binary_all())
