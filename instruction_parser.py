@@ -1,3 +1,5 @@
+from symbol_manager import SymbolManager
+
 JUMP2BIN: dict[str, int] = {
     'JGT': 0b001,
     'JEQ': 0b010,
@@ -50,14 +52,16 @@ DEST2BIN: dict[str, int] = {
 
 class InstructionParser:
     instruction: str
-    address: int
+    symbol_manager: SymbolManager
+    address: str
     dest: int
     comp: int
     jump: int
 
-    def __init__(self, instruction: str):
+    def __init__(self, instruction: str, symbol_manager: SymbolManager):
         self.instruction = instruction
-        self.address = 0
+        self.symbol_manager = symbol_manager
+        self.address = ''
         self.dest = 0
         self.comp = 0
         self.jump = 0
@@ -67,7 +71,9 @@ class InstructionParser:
 
     def parse(self):
         if self.is_a_instruction():
-            self.address = int(self.instruction[1:])
+            self.address = self.instruction[1:]
+            if not self.address.isdecimal():
+                self.symbol_manager.register_symbol(self.address)
         else:
             semi_split = self.instruction.split(';')
             if len(semi_split) >= 2:
@@ -82,6 +88,10 @@ class InstructionParser:
 
     def to_binary(self) -> str:
         if self.is_a_instruction():
-            return f'0{self.address:015b}'
+            if self.address.isdecimal():
+                int_address = int(self.address)
+            else:
+                int_address = self.symbol_manager.get_int_address(self.address)
+            return f'0{int_address:015b}'
         else:
             return f'111{self.comp:07b}{self.dest:03b}{self.jump:03b}'
