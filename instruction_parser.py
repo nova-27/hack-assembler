@@ -75,8 +75,10 @@ class InstructionParser:
             equal_split = semi_split[0].split('=')
             if len(equal_split) >= 2:
                 self.comp = COMP2BIN[equal_split[1]]
-            sorted_dest = "".join(sorted(equal_split[0]))
-            self.dest = DEST2BIN[sorted_dest]
+                sorted_dest = "".join(sorted(equal_split[0]))
+                self.dest = DEST2BIN[sorted_dest]
+            else:
+                self.comp = COMP2BIN[equal_split[0]]
 
     def to_binary(self) -> str:
         if self.is_a_instruction():
