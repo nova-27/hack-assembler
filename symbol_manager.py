@@ -11,7 +11,7 @@ class SymbolManager:
             'SCREEN': 0x4000,
             'KBD': 0x6000
         }
-        for i in range(0, 15):
+        for i in range(0, 16):
             self.symbols[f'R{i}'] = i
 
     def register_symbol(self, symbol: str, address: int = -1):
